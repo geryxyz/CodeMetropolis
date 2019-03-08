@@ -24,7 +24,7 @@ public class Linking {
     static {
         SUPPORTED_TARGETS.put(Type.FLOOR, new String[]{"width", "height", "length", "character", "external_character", "torches"});
         SUPPORTED_TARGETS.put(Type.CELLAR, new String[]{"width", "height", "length", "character", "external_character", "torches"});
-        SUPPORTED_TARGETS.put(Type.GARDEN, new String[]{"tree-ratio", "mushroom-ratio", "flower-ratio"});
+        SUPPORTED_TARGETS.put(Type.GARDEN, new String[]{"tree-ratio", "mushroom-ratio", "flower-ratio", "monster-count", "monster-label"});
         SUPPORTED_TARGETS.put(Type.GROUND, new String[]{});
     }
 	

@@ -9,10 +9,13 @@ import codemetropolis.toolchain.rendering.model.pattern.RandomPattern;
 import codemetropolis.toolchain.rendering.model.pattern.RepeationPattern;
 import codemetropolis.toolchain.rendering.model.pattern.YSplitPattern;
 import codemetropolis.toolchain.rendering.model.primitive.SignPost;
+import codemetropolis.toolchain.rendering.model.primitive.Spawner;
 import codemetropolis.toolchain.rendering.model.primitive.SolidBox;
 import codemetropolis.toolchain.rendering.util.Orientation;
 
 public class Garden extends Building {
+	
+	int monster_count;
 
 	public Garden(Buildable innerBuildable) throws BuildingTypeMismatchException {
 		super(innerBuildable);
@@ -23,11 +26,18 @@ public class Garden extends Building {
 		prepareBase();
 		prepareDoor();
 		prepareSigns();
+		prepareSpawners();
+		prepareSignsForSpawners();
 	}
 	
 	private void prepareBase( ) {
 		BasicBlock _fnc = new BasicBlock( "minecraft:fence" );
 		BasicBlock _sns = new BasicBlock( "minecraft:sandstone" );
+		
+		monster_count = innerBuildable.hasAttribute("monster-count") 
+				? Integer.parseInt( innerBuildable.getAttributeValue ("monster-count") )
+				: 0;
+		
 		RandomPattern _flowers = new RandomPattern( new RepeationPattern(  new BasicBlock[][][]{ { { BasicBlock.NonBlock } } } ) );
 		
 		RandomPattern _redOrYellow = new RandomPattern( new RepeationPattern(  new BasicBlock[][][]{ { { new BasicBlock( "minecraft:yellow_flower" ) } } } ) );
@@ -143,6 +153,32 @@ public class Garden extends Building {
 		primitives.add(new SignPost(position.getX() + size.getX() - 1, position.getY() + 2, position.getZ(), SignPost.Orientation.NORTHEAST, innerBuildable.getName()));
 		primitives.add(new SignPost(position.getX(), position.getY() + 2, position.getZ() + size.getZ() - 1, SignPost.Orientation.SOUTHWEST, innerBuildable.getName()));
 		primitives.add(new SignPost(position.getX() + size.getX() - 1, position.getY() + 2, position.getZ() + size.getZ() - 1, SignPost.Orientation.SOUTHEAST, innerBuildable.getName()));
+	}
+	
+	private void prepareSpawners( ) {
+		if (monster_count > 0) primitives.add(new Spawner(position.getX() + size.getX() / 2, position.getY(), position.getZ() - 3));
+		if (monster_count > 1) primitives.add(new Spawner(position.getX() + size.getX() / 2, position.getY(), position.getZ() + size.getZ() + 2));
+		if (monster_count > 2) primitives.add(new Spawner(position.getX() - 3, position.getY(), position.getZ() + size.getZ() / 2));
+		if (monster_count > 3) primitives.add(new Spawner(position.getX() + size.getX() + 2, position.getY(), position.getZ() + size.getZ() / 2));
+	}
+	
+	private void prepareSignsForSpawners() {
+		String signName = innerBuildable.hasAttribute("monster-label") ? (innerBuildable.getAttributeValue("monster-label")) : "";
+		
+		switch (monster_count) {
+			case 4:
+				primitives.add(new SignPost(position.getX() + size.getX() + 2, position.getY(), position.getZ() + size.getZ() / 2 + 1, SignPost.Orientation.EAST, signName));
+				primitives.add(new SignPost(position.getX() + size.getX() + 2, position.getY(), position.getZ() + size.getZ() / 2 - 1, SignPost.Orientation.EAST, signName));
+			case 3:
+				primitives.add(new SignPost(position.getX() - 3, position.getY(), position.getZ() + size.getZ() / 2 + 1, SignPost.Orientation.WEST, signName));
+				primitives.add(new SignPost(position.getX() - 3, position.getY(), position.getZ() + size.getZ() / 2 - 1, SignPost.Orientation.WEST, signName));
+			case 2:
+				primitives.add(new SignPost(position.getX() + size.getX() / 2 - 1, position.getY(), position.getZ() + size.getZ() + 2, SignPost.Orientation.SOUTH, signName));
+				primitives.add(new SignPost(position.getX() + size.getX() / 2 + 1, position.getY(), position.getZ() + size.getZ() + 2, SignPost.Orientation.SOUTH, signName));
+			case 1:
+				primitives.add(new SignPost(position.getX() + size.getX() / 2 - 1, position.getY(), position.getZ() - 3, SignPost.Orientation.NORTH, signName));
+				primitives.add(new SignPost(position.getX() + size.getX() / 2 + 1, position.getY(), position.getZ() - 3, SignPost.Orientation.NORTH, signName));
+		}
 	}
 
 }
