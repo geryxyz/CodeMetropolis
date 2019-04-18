@@ -13,7 +13,7 @@ public class Cellar extends Floor {
 
 	public Cellar(Buildable innerBuildable) throws BuildingTypeMismatchException {
 		super(innerBuildable);
-		
+
 		if ( innerBuildable.getType() != Type.CELLAR )
 			throw new BuildingTypeMismatchException(innerBuildable.getType(), getClass());
 		

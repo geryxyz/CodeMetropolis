@@ -146,14 +146,22 @@ public class BuildableTree {
 					}
 			
 					Point size;
+
+
+
 					if(eElement.getElementsByTagName("size").item(0) != null && eElement.getElementsByTagName("size").item(0).getParentNode() == nNode) {
 						size = new Point(
-							Integer.parseInt(((Element)eElement.getElementsByTagName("size").item(0)).getAttribute("x")),
-							Integer.parseInt(((Element)eElement.getElementsByTagName("size").item(0)).getAttribute("y")),
-							Integer.parseInt(((Element)eElement.getElementsByTagName("size").item(0)).getAttribute("z"))
-							);
-					} else {
+								Integer.parseInt(((Element) eElement.getElementsByTagName("size").item(0)).getAttribute("x")),
+								Integer.parseInt(((Element) eElement.getElementsByTagName("size").item(0)).getAttribute("y")),
+								Integer.parseInt(((Element) eElement.getElementsByTagName("size").item(0)).getAttribute("z"))
+						);
+
+
+
+					}
+					 else {
 						size = new Point();
+
 					}
 					
 					Buildable b = new Buildable(
@@ -163,7 +171,8 @@ public class BuildableTree {
 							position,
 							size
 							);
-					
+
+
 					NodeList attributeNodes = eElement.getElementsByTagName("attributes").item(0).getChildNodes();
 					
 					for(int i = 1; attributeNodes.item(i) != null; i += 2) {
@@ -171,6 +180,7 @@ public class BuildableTree {
 								((Element)attributeNodes.item(i)).getAttribute("name"),
 								((Element)attributeNodes.item(i)).getAttribute("value")
 						);
+
 					}
 					
 					if(!nNode.getParentNode().getNodeName().equals("buildables")) {

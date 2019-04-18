@@ -12,19 +12,48 @@ import codemetropolis.toolchain.rendering.model.primitive.SignPost;
 import codemetropolis.toolchain.rendering.model.primitive.SolidBox;
 import codemetropolis.toolchain.rendering.util.Orientation;
 
+
+
 public class Garden extends Building {
+	private int BuiltNumber1=0;
+	private int BuiltNumber2=0;
+	private int BuiltNumber3=0;
+	
 
 	public Garden(Buildable innerBuildable) throws BuildingTypeMismatchException {
 		super(innerBuildable);
 		
 		if ( innerBuildable.getType() != Type.GARDEN )
-			throw new BuildingTypeMismatchException(innerBuildable.getType(), getClass());
-
+			throw new BuildingTypeMismatchException(innerBuildable.getType(), getClass());	
 		prepareBase();
 		prepareDoor();
 		prepareSigns();
 	}
-	
+
+	public int getBuiltNumber1() {
+		return BuiltNumber1;
+	}
+
+	public void setBuiltNumber1(int builtNumber1) {
+		BuiltNumber1 = builtNumber1;
+	}
+
+	public int getBuiltNumber2() {
+		return BuiltNumber2;
+	}
+
+	public void setBuiltNumber2(int builtNumber2) {
+		BuiltNumber2 = builtNumber2;
+	}
+
+	public int getBuiltNumber3() {
+		return BuiltNumber3;
+	}
+
+	public void setBuiltNumber3(int builtNumber3) {
+		BuiltNumber3 = builtNumber3;
+	}
+
 	private void prepareBase( ) {
 		BasicBlock _fnc = new BasicBlock( "minecraft:fence" );
 		BasicBlock _sns = new BasicBlock( "minecraft:sandstone" );
@@ -143,6 +172,8 @@ public class Garden extends Building {
 		primitives.add(new SignPost(position.getX() + size.getX() - 1, position.getY() + 2, position.getZ(), SignPost.Orientation.NORTHEAST, innerBuildable.getName()));
 		primitives.add(new SignPost(position.getX(), position.getY() + 2, position.getZ() + size.getZ() - 1, SignPost.Orientation.SOUTHWEST, innerBuildable.getName()));
 		primitives.add(new SignPost(position.getX() + size.getX() - 1, position.getY() + 2, position.getZ() + size.getZ() - 1, SignPost.Orientation.SOUTHEAST, innerBuildable.getName()));
+
+
 	}
 
 }

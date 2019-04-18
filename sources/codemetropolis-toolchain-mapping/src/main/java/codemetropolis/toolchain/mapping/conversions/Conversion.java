@@ -1,6 +1,7 @@
 package codemetropolis.toolchain.mapping.conversions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -11,11 +12,7 @@ import codemetropolis.toolchain.mapping.model.Parameter;
 @XmlJavaTypeAdapter(ConversionAdapter.class)
 public abstract class Conversion {
 	
-	protected List<Parameter> parameters;
-	
-	public Conversion() {
-		parameters = new ArrayList<Parameter>();
-	}
+	protected List<Parameter> parameters = new ArrayList<Parameter>();
 	
 	public abstract Object apply(Object value, Limit limit);
 	
@@ -33,8 +30,12 @@ public abstract class Conversion {
 		}
 	}
 	
-	public Parameter[] getParameters() {
-		return parameters.toArray(new Parameter[parameters.size()]);
+	@SuppressWarnings("unchecked")
+	public List<Parameter> getParameters() {
+		if(parameters == null) {
+			parameters = Collections.EMPTY_LIST;
+		}
+		return Collections.unmodifiableList(parameters);
 	}
 	
 	public static Conversion createFromName(String name) {	

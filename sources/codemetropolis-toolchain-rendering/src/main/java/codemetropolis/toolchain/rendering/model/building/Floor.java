@@ -19,7 +19,8 @@ public class Floor extends Building {
 
 	public Floor(Buildable innerBuildable) throws BuildingTypeMismatchException {
 		super(innerBuildable);
-		
+
+
 		if ( innerBuildable.getType()!= Type.FLOOR && innerBuildable.getType() != Type.CELLAR )
 			throw new BuildingTypeMismatchException(innerBuildable.getType(), getClass());
 
@@ -251,7 +252,14 @@ public class Floor extends Building {
 		primitives.add(new WallSign(position.getX() + size.getX() / 2, position.getY() + 3, position.getZ() + 1, WallSign.Orientation.SOUTH, innerBuildable.getName()));
 		primitives.add(new WallSign(position.getX() + size.getX() / 2, position.getY() + 3, position.getZ()  + size.getZ() - 2, WallSign.Orientation.NORTH, innerBuildable.getName()));
 		primitives.add(new WallSign(position.getX() + 1, position.getY() + 3, position.getZ() + size.getZ() / 2, WallSign.Orientation.EAST, innerBuildable.getName()));
-		primitives.add(new WallSign(position.getX() + size.getX() - 2, position.getY() + 3, position.getZ() + size.getZ() / 2, WallSign.Orientation.WEST, innerBuildable.getName()));	
+		primitives.add(new WallSign(position.getX() + size.getX() - 2, position.getY() + 3, position.getZ() + size.getZ() / 2, WallSign.Orientation.WEST, innerBuildable.getName()));
+
+		//METRIC WALL signs
+		primitives.add(new WallSign(position.getX() + size.getX() - 2, position.getY() + 3, position.getZ() + size.getZ() / 2, WallSign.Orientation.WEST, "First metric: "+Integer.toString(BuiltMetric1)));
+		primitives.add(new WallSign(position.getX() + size.getX() - 2, position.getY() + 3, position.getZ() + (size.getZ() / 2) + 1, WallSign.Orientation.WEST, "Second metric: "+Integer.toString(BuiltMetric2)));
+		primitives.add(new WallSign(position.getX() + size.getX() - 2, position.getY() + 3, position.getZ() + (size.getZ() / 2) - 1, WallSign.Orientation.WEST, "Third metric:  "+Integer.toString(BuiltMetric3)));
+		
+		
 	}
 	
 	private void prepareTorches( ) {

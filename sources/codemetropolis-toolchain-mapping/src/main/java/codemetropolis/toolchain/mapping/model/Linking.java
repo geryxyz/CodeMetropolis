@@ -19,13 +19,13 @@ import codemetropolis.toolchain.mapping.exceptions.NotSupportedLinkingException;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Linking {
 
-    private static final Map<Type, String[]> SUPPORTED_TARGETS = new HashMap<>();
+    private static final Map<Type, String[]> SUPPORTED_PROPERTIES = new HashMap<>();
 
     static {
-        SUPPORTED_TARGETS.put(Type.FLOOR, new String[]{"width", "height", "length", "character", "external_character", "torches"});
-        SUPPORTED_TARGETS.put(Type.CELLAR, new String[]{"width", "height", "length", "character", "external_character", "torches"});
-        SUPPORTED_TARGETS.put(Type.GARDEN, new String[]{"tree-ratio", "mushroom-ratio", "flower-ratio"});
-        SUPPORTED_TARGETS.put(Type.GROUND, new String[]{});
+        SUPPORTED_PROPERTIES.put(Type.FLOOR, new String[]{"width","BuiltMetric1", "height","BuiltMetric2", "length","BuiltMetric3", "character", "external_character", "torches"});
+        SUPPORTED_PROPERTIES.put(Type.CELLAR, new String[]{"width", "height", "length", "character", "external_character", "torches"});
+        SUPPORTED_PROPERTIES.put(Type.GARDEN, new String[]{"tree-ratio", "mushroom-ratio", "flower-ratio"});
+        SUPPORTED_PROPERTIES.put(Type.GROUND, new String[]{});
     }
 	
 	@XmlAttribute
@@ -37,18 +37,45 @@ public class Linking {
 	@XmlElement(name="binding")
 	private List<Binding> bindings = new ArrayList<>();
 
+	public Linking() {}
+
+	public Linking(String source, String target) {
+		this.source = source;
+		this.target = target;
+	}
+
 	public String getSource() {
 		return source;
+	}
+	
+	public void setSource(String source) {
+		this.source = source;
 	}
 
 	public String getTarget() {
 		return target;
+	}
+	
+	public void setTarget(String target) {
+		this.target = target;
 	}
 
 	public List<Binding> getBindings() {
 		return Collections.unmodifiableList(bindings);
 	}
 	
+	public void addBinding(Binding binding) {
+		bindings.add(binding);
+	}
+	
+	public void removeBinding(Binding binding) {
+		bindings.remove(binding);
+	}
+	
+	public static String[] getSupportedProperties(Type buildableType) {
+		return SUPPORTED_PROPERTIES.get(buildableType);
+	}
+
 	public void validate(List<Constant> resources) throws NotSupportedLinkingException, MissingResourceException {
 		Type type;
 		try {
@@ -56,7 +83,7 @@ public class Linking {
 		} catch(IllegalArgumentException e) {
 			throw new NotSupportedLinkingException(String.format(Resources.get("invalid_linking_target_error"), target));
 		}
-		String[] validTargetProps = SUPPORTED_TARGETS.get(type);
+		String[] validTargetProps = SUPPORTED_PROPERTIES.get(type);
 		for(Binding b : bindings) {
 			validateBindingResource(b, resources);
 			boolean isValid = false;

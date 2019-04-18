@@ -8,10 +8,14 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.List;
 
+import codemetropolis.toolchain.rendering.model.building.Number;
+import codemetropolis.toolchain.rendering.model.primitive.SignPost;
+import codemetropolis.toolchain.rendering.model.primitive.WallSign;
 import org.apache.commons.lang3.time.StopWatch;
 
 import codemetropolis.blockmodifier.World;
 import codemetropolis.toolchain.commons.cmxml.Buildable;
+import codemetropolis.toolchain.commons.cmxml.Point;
 import codemetropolis.toolchain.commons.cmxml.BuildableTree;
 import codemetropolis.toolchain.commons.cmxml.exceptions.CmxmlReaderException;
 import codemetropolis.toolchain.rendering.events.ProgressEvent;
@@ -28,7 +32,9 @@ public class WorldBuilder {
 	
 	private World world;
 	private List<Building> buildings = new ArrayList<Building>();
+    private List<Number> numberList = new ArrayList<Number>();
 	private StopWatch stopWatch = new StopWatch();
+
 
 	private int count = 0;
 	private int total = 0;
@@ -46,24 +52,53 @@ public class WorldBuilder {
 			return;
 		}
 		
+		
 		List<Floor> floors = new ArrayList<Floor>();
+		List<Number> numbers=new ArrayList<Number>();
 		List<Cellar> cellars = new ArrayList<Cellar>();
 		List<Garden> gardens = new ArrayList<Garden>();
 		List<Ground> grounds = new ArrayList<Ground>();
 
+		for(Buildable buildable: buildables.getBuildables() ){
+
+			if(buildable.getType()== Buildable.Type.GARDEN) {
+				for (Buildable b : buildable.getDescendants()) {
+					if(b.getType()== Buildable.Type.FLOOR){
+
+					buildable.setBuiltMetric1(buildable.getBuiltMetric1() + Integer.parseInt(b.getAttributeValue("BuiltMetric1")));
+					buildable.setBuiltMetric2(buildable.getBuiltMetric2() + Integer.parseInt(b.getAttributeValue("BuiltMetric2")));
+					buildable.setBuiltMetric3(buildable.getBuiltMetric3() + Integer.parseInt(b.getAttributeValue("BuiltMetric3")));
+				}}
+				Number First=new Number(buildable, "BuiltMetric1");
+				Number Second=new Number(buildable, "BuiltMetric2");
+				Number Third=new Number(buildable, "BuiltMetric3");
+				First.getPrimitives().add(new WallSign(First.getPosition().getX()-1,First.getPosition().getY(), First.getPosition().getZ()+2, WallSign.Orientation.WEST, "First metric"));
+				Second.getPrimitives().add(new WallSign(Second.getPosition().getX()-1, Second.getPosition().getY(),Second.getPosition().getZ()+2 , WallSign.Orientation.WEST, "Second metric"));
+				Third.getPrimitives().add(new WallSign(Third.getPosition().getX()-1, Third.getPosition().getY(), Third.getPosition().getZ()+2, WallSign.Orientation.WEST, "Third metric"));
+
+				numbers.add(First);
+				numbers.add(Second);
+				numbers.add(Third);
+
+			}
+
+
+		}
+
+
 		for(Buildable b : buildables.getBuildables()) {
 			switch(b.getType()) {
-				case FLOOR: 
+				case FLOOR:
 					Floor floor = new Floor(b);
 					floors.add(floor);
 					total += floor.getNumberOfBlocks();
 					break;
-				case CELLAR: 
+				case CELLAR:
 					Cellar cellar = new Cellar(b);
 					cellars.add(cellar);
 					total += cellar.getNumberOfBlocks();
 					break;
-				case GARDEN: 
+				case GARDEN:
 					Garden garden = new Garden(b);
 					gardens.add(garden);
 					total += garden.getNumberOfBlocks();
@@ -77,9 +112,32 @@ public class WorldBuilder {
 					break;
 			}
 		}
+
+		for(Garden garden : gardens) {
+			for(Buildable b: garden.getInnerBuildable().getChildren() ){
+
+				if(b.getType()== Buildable.Type.FLOOR) {
+
+					garden.setBuiltMetric1(garden.getBuiltMetric1() +  Integer.parseInt(b.getAttributeValue("BuiltMetric1")));
+					garden.setBuiltMetric2(garden.getBuiltMetric2() +  Integer.parseInt(b.getAttributeValue("BuiltMetric2")));
+					garden.setBuiltMetric3(garden.getBuiltMetric3() + Integer.parseInt(b.getAttributeValue("BuiltMetric3")));
+				}
+
+
+			}
+
+
+			garden.getPrimitives().add(new SignPost(garden.getPosition().getX() + garden.getSize().getX() - 1, garden.getPosition().getY()+2, (garden.getPosition().getZ())-1+ garden.getSize().getZ() - 1, SignPost.Orientation.SOUTHEAST, "BuiltMetric1: " + Integer.toString(garden.getBuiltMetric1())));
+			garden.getPrimitives().add(new SignPost(garden.getPosition().getX() + garden.getSize().getX() - 1, garden.getPosition().getY()+2, (garden.getPosition().getZ())-2 + garden.getSize().getZ() - 1, SignPost.Orientation.SOUTHEAST, "BuiltMetric2: " + Integer.toString(garden.getBuiltMetric2())));
+			garden.getPrimitives().add(new SignPost(garden.getPosition().getX() + garden.getSize().getX() - 1, garden.getPosition().getY()+2, (garden.getPosition().getZ())-3 + garden.getSize().getZ() - 1, SignPost.Orientation.SOUTHEAST, "BuiltMetric3: " + Integer.toString(garden.getBuiltMetric3())));
+
+		}
+
+
 		
 		buildings.addAll(grounds);
 		buildings.addAll(gardens);
+        buildings.addAll(numbers);
 		buildings.addAll(cellars);
 		buildings.addAll(floors);
 		

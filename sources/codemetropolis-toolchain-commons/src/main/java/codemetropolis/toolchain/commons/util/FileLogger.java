@@ -29,14 +29,17 @@ public final class FileLogger {
 	}
 	
 	public static void logInfo(String message) {
+		if(logger == null) return;
 		logger.log(Level.INFO, message);
 	}
 	
 	public static void logWarning(String message, Exception exception) {
+		if(logger == null) return;
 		logger.log(Level.WARNING, message, exception);
 	}
 	 
 	public static void logError(String message, Exception exception) {
+		if(logger == null) return;
 		logger.log(Level.SEVERE, message, exception);
 	}
 	 

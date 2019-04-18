@@ -16,7 +16,9 @@ public class Buildable implements Comparable<Buildable> {
 		GARDEN,
 		FLOOR,
 		CELLAR,
-		CONTAINER;
+		CONTAINER,
+
+
 	}
 	
 	private String id;
@@ -28,6 +30,7 @@ public class Buildable implements Comparable<Buildable> {
 	private List<Buildable> children;
 	private Buildable parent;
 	private String cdfNames;
+	private int BuiltMetric1, BuiltMetric2, BuiltMetric3;
 	
 	public Buildable(String id, String name, Type type) {
 		this(id, name, type, new Point(), new Point());
@@ -165,7 +168,7 @@ public class Buildable implements Comparable<Buildable> {
 				name,
 				value
 				);
-		attributes.add(a);
+				attributes.add(a);
 	}
 	
 	public void addAttributes(Attribute... attributes) {
@@ -308,6 +311,30 @@ public class Buildable implements Comparable<Buildable> {
 	
 	public void setSizeZ(int z) {
 		size.setZ(z);
+	}
+
+	public int getBuiltMetric1() {
+		return BuiltMetric1;
+	}
+
+	public void setBuiltMetric1(int builtMetric1) {
+		BuiltMetric1 = builtMetric1;
+	}
+
+	public int getBuiltMetric2() {
+		return BuiltMetric2;
+	}
+
+	public void setBuiltMetric2(int builtMetric2) {
+		BuiltMetric2 = builtMetric2;
+	}
+
+	public int getBuiltMetric3() {
+		return BuiltMetric3;
+	}
+
+	public void setBuiltMetric3(int builtMetric3) {
+		BuiltMetric3 = builtMetric3;
 	}
 
 	public Attribute[] getAttributes() {

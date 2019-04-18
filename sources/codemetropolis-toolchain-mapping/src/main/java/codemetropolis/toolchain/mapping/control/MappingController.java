@@ -39,7 +39,7 @@ public class MappingController {
 	private boolean skipInvalidStructures;
 	private Stack<Buildable> buildableStack = new Stack<>();
 	private Mapping mapping;
-	
+	protected int metricValue;
 	public MappingController(Mapping mapping) {
 		this(mapping, 1.0, false);
 	}
@@ -90,6 +90,9 @@ public class MappingController {
 		for(Map.Entry<Buildable, Map<String, String>> entry : attributesByBuildables.entrySet()) {
 			
 			Buildable b = entry.getKey();
+
+
+
 			Map<String, String> attributes = entry.getValue();
 			
 			Linking linking = null;
@@ -138,25 +141,51 @@ public class MappingController {
 	}
 	
 	private void setProperty(Buildable b, String propertyName, Object value, boolean adjustSize) {
-
-		switch(propertyName) {
-			case "height":
-			case "width":
-			case "length":
-				value = Conversion.toInt(value);
-				if(adjustSize) value = Conversion.toInt(MIN_SIZE + (int)value * scale);
-				break;
-		}
+		
+		 
 		
 		switch(propertyName) {
+		case "height":
+		case "width":
+		case "length":
+		case "BuiltMetric1":
+		case "BuiltMetric2":
+		case "BuiltMetric3":
+
+
+			value = Conversion.toInt(value);
+			metricValue=(int)value;
+
+			if(adjustSize){ value = Conversion.toInt(MIN_SIZE + (int)value * scale);}
+			break;
+	}
+
+		
+		switch(propertyName) {
+			case "BuiltMetric1":
+				b.setBuiltMetric1(metricValue);
+				b.addAttribute(propertyName, String.valueOf(metricValue));
+				break;
+			
+			case "BuiltMetric2":
+				b.setBuiltMetric2(metricValue);
+				b.addAttribute(propertyName, String.valueOf(metricValue));
+				break;
+			case "BuiltMetric3":
+				b.setBuiltMetric3(metricValue);
+				b.addAttribute(propertyName, String.valueOf(metricValue));
+				break;	
+			
 			case "height":
 				b.setSizeY((int)value);
 				break;
 			case "width":
 				b.setSizeX((int)value);
+
 				break;
 			case "length":
 				b.setSizeZ((int)value);
+
 				break;
 			default:
 				b.addAttribute(propertyName, String.valueOf(value));
@@ -269,7 +298,9 @@ public class MappingController {
 		Iterator it = buildables.iterator();
 		while(it.hasNext()) {
 			Buildable b = it.next();
-			
+
+
+
 			if(b.getSizeX() % 2 == 0) b.setSizeX(b.getSizeX() + 1);
 			if(b.getSizeY() % 2 == 0) b.setSizeY(b.getSizeY() + 1);
 			if(b.getSizeZ() % 2 == 0) b.setSizeZ(b.getSizeZ() + 1);
