@@ -1,0 +1,66 @@
+<mapping version="2.0">
+
+<resources>
+  <constant value="planks" id="cellar_character"/>
+  <constant value="wood" id="cellar_external_character"/>
+</resources>
+<linking source="branch" target="ground"/>
+
+<linking source="commit" target="floor">		
+		<binding from="addition" to="length">
+    <conversions>
+				<conversion type="normalize"/>
+			</conversions>	
+    </binding>
+		<binding from="deletion" to="width">
+    <conversions>
+				<conversion type="normalize"/>
+			</conversions>	
+    </binding>
+		<binding from="total" to="height"/>
+    <binding from="messageLength" to="character">
+    <conversions>
+          <conversion type="quantization">
+            <parameter name="level0" value="glass"/>
+            <parameter name="level1" value="sand"/>
+            <parameter name="level2" value="planks"/>
+            <parameter name="level3" value="stone"/>
+            <parameter name="level4" value="obsidian"/>
+          </conversion>
+      </conversions>		
+    </binding>
+    <binding from="messageLength" to="external_character">
+    <conversions>
+          <conversion type="quantization">
+            <parameter name="level0" value="metal"/>
+            <parameter name="level1" value="sandstone"/>
+            <parameter name="level2" value="wood"/>
+            <parameter name="level3" value="cobblestone"/>
+            <parameter name="level4" value="obsidian"/>
+          </conversion>
+      </conversions>		
+    </binding>
+    <binding from="numberOfComments" to="torches">
+			<conversions>
+				<conversion type="quantization">
+					<parameter name="level0" value="1"/>
+					<parameter name="level1" value="2"/>
+					<parameter name="level2" value="3"/>
+				</conversion>
+			</conversions>
+		</binding>
+	</linking>	
+
+<linking source="user" target="garden">
+    <binding from="deletionRatio" to="flower-ratio">
+			<conversions>
+				<conversion type="normalize"/>
+			</conversions>
+		</binding>
+    <binding from="additionRatio" to="tree-ratio">
+    	<conversions>
+				<conversion type="normalize"/>
+			</conversions>
+    </binding>
+</linking>
+</mapping>
