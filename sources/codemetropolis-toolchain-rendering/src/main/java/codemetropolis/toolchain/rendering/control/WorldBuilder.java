@@ -37,7 +37,7 @@ public class WorldBuilder {
 		world = new World(worldPath, GROUND_LEVEL);
 	}
 	
-	public void createBuildings(String inputPath) throws BuildingTypeMismatchException{
+	public void createBuildings(String inputPath) throws Exception{
 		BuildableTree buildables = new BuildableTree();
 		try {
 			buildables.loadFromFile(inputPath);

@@ -14,6 +14,7 @@ public class RenderingExecutorArgs extends ExecutorArgs {
 	}
 	
 	public RenderingExecutorArgs(String inputFile, String worldPath, boolean overwriteSilently) {
+		
 		this(inputFile, worldPath, overwriteSilently, Integer.MAX_VALUE);
 	}
 	

@@ -1,6 +1,8 @@
 package codemetropolis.toolchain.rendering.model.primitive;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import codemetropolis.toolchain.commons.cmxml.Point;
 import codemetropolis.toolchain.rendering.model.BasicBlock;
@@ -8,20 +10,10 @@ import codemetropolis.toolchain.rendering.model.BasicBlock;
 public class WallSign implements Primitive {
 	
 	public enum Orientation {
-		NORTH(2),
-		SOUTH(3),
-		WEST(4),
-		EAST(5);
-		
-		private final int value;
-		
-		Orientation(int v) {
-			value = v;
-		}
-		
-		public int getValue() {
-			return value;
-		}
+		NORTH,
+		SOUTH,
+		WEST,
+		EAST;
 	}
 	
 	private Point position;
@@ -41,7 +33,14 @@ public class WallSign implements Primitive {
 	
 	@Override
 	public int toCSVFile(File directory) {
-		new Boxel(new BasicBlock((short) 68, orientation.getValue()), position, text).toCSVFile(directory);
+		
+		Map<String, String> properties = new HashMap<>();
+		properties.put("facing", orientation.toString().toLowerCase());
+		
+		BasicBlock wallSign = new BasicBlock(BasicBlock.WALL_SIGN.getId(), properties);
+		
+		
+		new Boxel(wallSign, position, text).toCSVFile(directory);
 		return 1;
 	}
 	@Override

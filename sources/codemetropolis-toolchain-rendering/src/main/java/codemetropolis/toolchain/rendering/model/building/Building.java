@@ -15,49 +15,42 @@ public class Building {
 	protected LinkedList<Primitive> primitives = new LinkedList<Primitive>();
 	protected LinkedList<SignPost> signs = new LinkedList<SignPost>();
 	protected Buildable innerBuildable;
-	
+
 	protected Point position;
 	protected Point center;
 	protected Point size;
-	
-	public Building( Buildable innerBuildable )
-	{
+
+	public Building(Buildable innerBuildable) {
 		this.innerBuildable = innerBuildable;
-		
-		size = new Point(
-				adjustSize(innerBuildable.getSizeX()),
-				adjustSize(innerBuildable.getSizeY()),
-				adjustSize(innerBuildable.getSizeZ())
-				);
-		
-		position = new Point(
-				innerBuildable.getPositionX(),
-				innerBuildable.getPositionY(),
-				innerBuildable.getPositionZ()
-				);
-		
-		center = new Point(
-				(int)(size.getX() * 0.5),
-				(int)(size.getY() * 0.5),
-				(int)(size.getZ() * 0.5)
-				);
+
+		size = new Point(adjustSize(innerBuildable.getSizeX()), adjustSize(innerBuildable.getSizeY()),
+				adjustSize(innerBuildable.getSizeZ()));
+
+		position = new Point(innerBuildable.getPositionX(), innerBuildable.getPositionY(),
+				innerBuildable.getPositionZ());
+
+		center = new Point((int) (size.getX() * 0.5), (int) (size.getY() * 0.5), (int) (size.getZ() * 0.5));
 	}
-	
-	private static int adjustSize( int x ) {
-		if(x < MIN_SIZE) return MIN_SIZE;
-		if(x % 2 == 0) return x + 1;
+
+	public static int adjustSize(int x) {
+		if (x < MIN_SIZE)
+			return MIN_SIZE;
+		if (x % 2 == 0)
+			return x + 1;
 		return x;
 	}
 	
+	
+
 	public int toCSVFile(File directory) {
 		int count = 0;
-		for(Primitive primitive : primitives) {
+		for (Primitive primitive : primitives) {
 			primitive.toCSVFile(directory);
 			count += primitive.getNumberOfBlocks();
 		}
 		return count;
 	}
-	
+
 	public Buildable getInnerBuildable() {
 		return innerBuildable;
 	}
@@ -76,9 +69,9 @@ public class Building {
 
 	public int getNumberOfBlocks() {
 		int result = 0;
-		for(Primitive p : primitives)
+		for (Primitive p : primitives)
 			result += p.getNumberOfBlocks();
 		return result;
 	}
-	
+
 }
